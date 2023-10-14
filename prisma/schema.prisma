@@ -9,3 +9,152 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           String   @id @default(uuid())
+  email        String
+  password     String
+  firstName    String
+  middleName   String?
+  lastName     String
+  contactNo    Int
+  profileImage String?
+  role         UserRole @default(user)
+
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  newConnectionReq         NewConnectionReq[]
+  payments                 Payment[]
+  customerConnectionStatus CustomerConnectionStatus[]
+  reviews                  Review[]
+  notifications            Notification[]
+
+  @@map("users")
+}
+
+model Package {
+  id        String  @id @default(uuid())
+  name      String
+  price     Int
+  bandwidth Int
+  iptv      Boolean
+  bdix      Boolean
+
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  payments                 Payment[]
+  customerConnectionStatus CustomerConnectionStatus[]
+
+  @@map("packages")
+}
+
+model NewConnectionReq {
+  id                String                 @id @default(uuid())
+  customerId        String
+  customer          User                   @relation(fields: [customerId], references: [id])
+  connectionDate    DateTime
+  connectionAddress String
+  status            NewConnectionReqStatus @default(pending)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("new_connection_req")
+}
+
+model Notification {
+  id              String          @id @default(uuid())
+  customerId      String
+  customer        User            @relation(fields: [customerId], references: [id])
+  message         String
+  notificationFor NotificationFor @default(single)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notifications")
+}
+
+model CustomerConnectionStatus {
+  id                       String               @id @default(uuid())
+  customerId               String
+  customer                 User                 @relation(fields: [customerId], references: [id])
+  broadbandAccountType     BroadbandAccountType @default(PPoE)
+  broadbandAccount         String
+  broadbandAccountPassword String
+  paymentStatus            PaymentStatus        @default(due)
+  broadbandPackageId       String
+  broadbandPackage         Package              @relation(fields: [broadbandPackageId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("customer_connection_status")
+}
+
+model Payment {
+  id               String   @id @default(uuid())
+  packagePaymentId String
+  package          Package  @relation(fields: [packagePaymentId], references: [id])
+  customerId       String
+  customer         User     @relation(fields: [customerId], references: [id])
+  paymentForDate   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("payments")
+}
+
+model Review {
+  id         String @id @default(uuid())
+  customerId String
+  customer   User   @relation(fields: [customerId], references: [id])
+  message    String
+  ratting    Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
+}
+
+model Blog {
+  id        String  @id @default(uuid())
+  title     String
+  message   String
+  blogImage String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("blogs")
+}
+
+enum UserRole {
+  super_admin
+  admin
+  user
+}
+
+enum NewConnectionReqStatus {
+  pending
+  accepted
+  canceled
+  completed
+}
+
+enum NotificationFor {
+  all
+  single
+}
+
+enum BroadbandAccountType {
+  PPoE
+  static
+}
+
+enum PaymentStatus {
+  due
+  paid
+}
