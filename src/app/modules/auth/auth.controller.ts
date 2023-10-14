@@ -2,12 +2,12 @@ import { Request, Response } from 'express'
 import { AuthService } from './auth.service'
 import catchAsync from '../../../shared/catchAsync'
 import sendResponse from '../../../shared/sendResponse'
-import { User } from '@prisma/client'
 import httpStatus from 'http-status'
+import config from '../../../config'
 
 const signup = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.signup(req.body)
-  sendResponse<User>(res, {
+  sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Account Created Successfully!',
@@ -15,6 +15,23 @@ const signup = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const login = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.login(req.body)
+  const { refreshToken, ...others } = result
+  const cookieOptions = {
+    secure: config.env === 'production',
+    httpOnly: true,
+  }
+  res.cookie('refreshToken', refreshToken, cookieOptions)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Account login Successfully!',
+    data: others,
+  })
+})
+
 export const AuthController = {
   signup,
+  login,
 }

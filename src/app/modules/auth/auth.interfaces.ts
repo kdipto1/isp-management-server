@@ -1,2 +1,4 @@
-
-// Define your interfaces here
+export type ILoginResponse = {
+  accessToken: string
+  refreshToken: string
+}
