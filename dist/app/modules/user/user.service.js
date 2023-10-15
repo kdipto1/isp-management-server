@@ -1,2 +1,2 @@
-"use strict";
+'use strict';
 // Your service code here
