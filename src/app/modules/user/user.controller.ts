@@ -3,14 +3,19 @@ import catchAsync from '../../../shared/catchAsync';
 import { UserService } from './user.service';
 import sendResponse from '../../../shared/sendResponse';
 import httpStatus from 'http-status';
+import pick from '../../../shared/pick';
+import { UserFilterAbleFields } from './user.constants';
 
 const getAllOrFilter = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.getAllOrFilter();
+  const filters = pick(req.query, UserFilterAbleFields);
+  const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder']);
+  const result = await UserService.getAllOrFilter(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Accounts Retrieved Successfully!',
-    data: result,
+    meta: result.meta,
+    data: result.data,
   });
 });
 const getById = catchAsync(async (req: Request, res: Response) => {

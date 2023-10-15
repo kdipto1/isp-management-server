@@ -1,9 +1,82 @@
-import { User } from '@prisma/client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Prisma, User } from '@prisma/client';
 import prisma from '../../../shared/prisma';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import { IUserFilterRequest } from './user.interfaces';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { UserSearchAbleFields } from './user.constants';
+import { IGenericResponse } from '../../../interfaces/common';
+import ApiError from '../../../errors/ApiError';
+import httpStatus from 'http-status';
 
-const getAllOrFilter = async () => {
-  const result = await prisma.user.findMany();
-  return result;
+const getAllOrFilter = async (
+  filters: IUserFilterRequest,
+  options: IPaginationOptions,
+): Promise<IGenericResponse<Partial<User>[]>> => {
+  const { page, limit, skip } = paginationHelpers.calculatePagination(options);
+  const { searchTerm, ...filtersData } = filters;
+
+  const andConditions = [];
+
+  if (searchTerm) {
+    andConditions.push({
+      OR: UserSearchAbleFields.map(field => ({
+        [field]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
+      })),
+    });
+  }
+
+  if (Object.keys(filtersData).length > 0) {
+    andConditions.push({
+      AND: Object.keys(filtersData).map(key => ({
+        [key]: {
+          equals: (filtersData as any)[key],
+        },
+      })),
+    });
+  }
+
+  const whereConditions: Prisma.UserWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
+
+  const result = await prisma.user.findMany({
+    where: whereConditions,
+    select: {
+      id: true,
+      email: true,
+      firstName: true,
+      middleName: true,
+      lastName: true,
+      contactNo: true,
+      profileImage: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    skip,
+    take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? {
+            [options.sortBy]: options.sortOrder,
+          }
+        : { createdAt: 'desc' },
+  });
+
+  const total = await prisma.user.count({ where: whereConditions });
+  console.log(result, '++++++++++++++++++++++++++++++');
+  console.log(andConditions, '++++++++++++++++++++++++++++');
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: result,
+  };
 };
 
 const getById = async (id: string) => {
@@ -22,6 +95,7 @@ const updateById = async (id: string, payload: Partial<User>) => {
     },
     data: payload,
   });
+  if (!result) throw new ApiError(httpStatus.NOT_MODIFIED, 'Failed to update');
   return result;
 };
 
@@ -31,6 +105,7 @@ const deleteById = async (id: string) => {
       id,
     },
   });
+  if (!result) throw new ApiError(httpStatus.NOT_MODIFIED, 'Failed to delete');
   return result;
 };
 

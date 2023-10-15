@@ -1,2 +1,18 @@
+export const PackageSearchAbleFields = [
+  'name',
+  'price',
+  'bandwidth',
+  'iptv',
+  'bdix',
+];
 
-// Define your constants here
+export const PackageFilterAbleFields = [
+  'searchTerm',
+  'name',
+  'price',
+  'bandwidth',
+  'iptv',
+  'bdix',
+  'minPrice',
+  'maxPrice',
+];
