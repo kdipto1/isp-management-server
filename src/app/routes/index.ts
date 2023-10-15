@@ -4,6 +4,7 @@ import { UserRoutes } from '../modules/user/user.routes';
 import { InternetPackageRoutes } from '../modules/internetPackage/internetPackage.routes';
 import { NewConnectionReqRoutes } from '../modules/newConnectionReq/newConnectionReq.routes';
 import { CustomerConnectionStatusRoutes } from '../modules/customerConnectionStatus/customerConnectionStatus.routes';
+import { PaymentRoutes } from '../modules/payment/payment.routes';
 
 const router = express.Router();
 
@@ -27,6 +28,10 @@ const moduleRoutes = [
   {
     path: '/customer-connection-status',
     route: CustomerConnectionStatusRoutes,
+  },
+  {
+    path: '/customer-payment',
+    route: PaymentRoutes,
   },
 ];
 
