@@ -2,6 +2,7 @@ import express from 'express';
 import { AuthRoutes } from '../modules/auth/auth.routes';
 import { UserRoutes } from '../modules/user/user.routes';
 import { InternetPackageRoutes } from '../modules/internetPackage/internetPackage.routes';
+import { NewConnectionReqRoutes } from '../modules/newConnectionReq/newConnectionReq.routes';
 
 const router = express.Router();
 
@@ -17,6 +18,10 @@ const moduleRoutes = [
   {
     path: '/packages',
     route: InternetPackageRoutes,
+  },
+  {
+    path: '/new-connection-request',
+    route: NewConnectionReqRoutes,
   },
 ];
 
