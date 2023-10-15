@@ -5,6 +5,8 @@ import { InternetPackageRoutes } from '../modules/internetPackage/internetPackag
 import { NewConnectionReqRoutes } from '../modules/newConnectionReq/newConnectionReq.routes';
 import { CustomerConnectionStatusRoutes } from '../modules/customerConnectionStatus/customerConnectionStatus.routes';
 import { PaymentRoutes } from '../modules/payment/payment.routes';
+import { ReviewRoutes } from '../modules/review/review.routes';
+import { NotificationRoutes } from '../modules/notification/notification.routes';
 
 const router = express.Router();
 
@@ -32,6 +34,14 @@ const moduleRoutes = [
   {
     path: '/customer-payment',
     route: PaymentRoutes,
+  },
+  {
+    path: '/customer-review',
+    route: ReviewRoutes,
+  },
+  {
+    path: '/notification',
+    route: NotificationRoutes,
   },
 ];
 
