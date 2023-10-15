@@ -7,6 +7,7 @@ import { CustomerConnectionStatusRoutes } from '../modules/customerConnectionSta
 import { PaymentRoutes } from '../modules/payment/payment.routes';
 import { ReviewRoutes } from '../modules/review/review.routes';
 import { NotificationRoutes } from '../modules/notification/notification.routes';
+import { BlogRoutes } from '../modules/blog/blog.routes';
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ const moduleRoutes = [
     route: AuthRoutes,
   },
   {
-    path: '/user',
+    path: '/users',
     route: UserRoutes,
   },
   {
@@ -32,16 +33,20 @@ const moduleRoutes = [
     route: CustomerConnectionStatusRoutes,
   },
   {
-    path: '/customer-payment',
+    path: '/customer-payments',
     route: PaymentRoutes,
   },
   {
-    path: '/customer-review',
+    path: '/customer-reviews',
     route: ReviewRoutes,
   },
   {
-    path: '/notification',
+    path: '/notifications',
     route: NotificationRoutes,
+  },
+  {
+    path: '/blogs',
+    route: BlogRoutes,
   },
 ];
 
