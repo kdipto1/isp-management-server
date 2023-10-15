@@ -39,7 +39,7 @@ const login = async (payload: {
 }): Promise<ILoginResponse> => {
   const { contactNo, password } = payload;
 
-  if (!contactNo && !password)
+  if (!contactNo || !password)
     throw new ApiError(
       httpStatus.UNAUTHORIZED,
       'Contact No and Password Required',
