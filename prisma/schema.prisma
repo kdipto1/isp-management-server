@@ -76,15 +76,16 @@ model Notification {
 }
 
 model CustomerConnectionStatus {
-  id                       String               @id @default(uuid())
+  id                       String                   @id @default(uuid())
   customerId               String
-  customer                 User                 @relation(fields: [customerId], references: [id])
-  broadbandAccountType     BroadbandAccountType @default(PPoE)
+  customer                 User                     @relation(fields: [customerId], references: [id])
+  broadbandAccountType     BroadbandAccountType     @default(PPoE)
   broadbandAccount         String
   broadbandAccountPassword String
-  paymentStatus            PaymentStatus        @default(due)
+  internetConnectionStatus InternetConnectionStatus @default(disconnected)
+  paymentStatus            PaymentStatus            @default(due)
   broadbandPackageId       String
-  broadbandPackage         Package              @relation(fields: [broadbandPackageId], references: [id])
+  broadbandPackage         Package                  @relation(fields: [broadbandPackageId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -157,4 +158,9 @@ enum BroadbandAccountType {
 enum PaymentStatus {
   due
   paid
+}
+
+enum InternetConnectionStatus {
+  disconnected
+  connected
 }
