@@ -14,18 +14,30 @@ const getAllOrFilter = async (
   options: IPaginationOptions,
 ): Promise<IGenericResponse<Partial<User>[]>> => {
   const { page, limit, skip } = paginationHelpers.calculatePagination(options);
-  const { searchTerm, ...filtersData } = filters;
+  const { searchTerm, contactNo, ...filtersData } = filters;
 
   const andConditions = [];
 
   if (searchTerm) {
     andConditions.push({
-      OR: UserSearchAbleFields.map(field => ({
+      OR: UserSearchAbleFields.filter(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        field => typeof filtersData[field] === 'string',
+      ).map(field => ({
         [field]: {
           contains: searchTerm,
           mode: 'insensitive',
         },
       })),
+    });
+  }
+
+  if (contactNo) {
+    andConditions.push({
+      contactNo: {
+        equals: Number(contactNo),
+      },
     });
   }
 
@@ -67,8 +79,6 @@ const getAllOrFilter = async (
   });
 
   const total = await prisma.user.count({ where: whereConditions });
-  console.log(result, '++++++++++++++++++++++++++++++');
-  console.log(andConditions, '++++++++++++++++++++++++++++');
   return {
     meta: {
       total,

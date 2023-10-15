@@ -60,7 +60,6 @@ const getAllOrFilter = async (
     });
   }
 
-  // Handle boolean fields accordingly
   if (filtersData.iptv !== undefined) {
     andConditions.push({
       iptv: {
