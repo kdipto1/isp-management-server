@@ -3,8 +3,9 @@ export const UserSearchAbleFields = [
   'firstName',
   'middleName',
   'lastName',
-  'contactNo',
+  // 'contactNo',
   'role',
+  'address',
 ];
 
 export const UserFilterAbleFields = [
@@ -15,4 +16,5 @@ export const UserFilterAbleFields = [
   'lastName',
   'contactNo',
   'role',
+  'address',
 ];

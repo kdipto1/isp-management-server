@@ -22,6 +22,16 @@ const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
         },
       ];
     }
+  } else if (error.code === 'P2002') {
+    if (error.message.includes('create() invocation:')) {
+      message = 'Failed! to create';
+      errors = [
+        {
+          path: '',
+          message,
+        },
+      ];
+    }
   }
   const statusCode = 400;
   return {

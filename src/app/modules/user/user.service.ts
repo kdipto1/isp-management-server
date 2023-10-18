@@ -64,6 +64,7 @@ const getAllOrFilter = async (
       lastName: true,
       contactNo: true,
       profileImage: true,
+      address: true,
       role: true,
       createdAt: true,
       updatedAt: true,

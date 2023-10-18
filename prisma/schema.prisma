@@ -20,6 +20,7 @@ model User {
   contactNo    Int      @unique
   profileImage String?
   role         UserRole @default(user)
+  address      String   @default("")
 
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @updatedAt

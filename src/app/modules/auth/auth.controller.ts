@@ -16,8 +16,7 @@ const signup = catchAsync(async (req: Request, res: Response) => {
 });
 
 const login = catchAsync(async (req: Request, res: Response) => {
-  const data = req.body;
-  const result = await AuthService.login(data);
+  const result = await AuthService.login(req.body);
   const { refreshToken, ...others } = result;
   const cookieOptions = {
     secure: config.env === 'production',

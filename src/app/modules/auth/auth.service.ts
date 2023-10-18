@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import prisma from '../../../shared/prisma';
 import { JwtHelpers } from '../../../helpers/jwtHelpers';
 import config from '../../../config';
@@ -8,7 +8,24 @@ import { ILoginResponse } from './auth.interfaces';
 import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
 
-const signup = async (payload: User) => {
+const signup = async (payload: Prisma.UserCreateInput) => {
+  const isUserExists = await prisma.user.findFirst({
+    where: {
+      OR: [
+        {
+          contactNo: payload.contactNo,
+        },
+        {
+          email: payload.email,
+        },
+      ],
+    },
+  });
+  if (isUserExists)
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'User already exits by this contact number or email',
+    );
   if (payload) {
     const hashedPassword = await bcrypt.hash(
       payload.password,
@@ -28,6 +45,7 @@ const signup = async (payload: User) => {
       lastName: true,
       contactNo: true,
       profileImage: true,
+      address: true,
     },
   });
   return result;
