@@ -6,7 +6,7 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { PackageSearchAbleFields } from './internetPackage.constants';
 import { IGenericResponse } from '../../../interfaces/common';
 
-const create = async (payload: Package) => {
+const create = async (payload: Prisma.PackageCreateInput) => {
   const result = await prisma.package.create({
     data: payload,
   });

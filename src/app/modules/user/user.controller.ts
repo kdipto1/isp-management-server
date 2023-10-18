@@ -28,6 +28,17 @@ const getById = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getUserProfile = catchAsync(async (req: Request, res: Response) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { userId } = req.user as any;
+  const result = await UserService.getById(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Profile Retrieved Successfully!',
+    data: result,
+  });
+});
 const updateById = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = await UserService.updateById(id, req.body);
@@ -55,4 +66,5 @@ export const UserController = {
   getById,
   updateById,
   deleteById,
+  getUserProfile,
 };

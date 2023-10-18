@@ -1,7 +1,7 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Review } from '@prisma/client';
 import prisma from '../../../shared/prisma';
 
-const create = async (payload: Prisma.ReviewCreateInput) => {
+const create = async (payload: Prisma.ReviewCreateInput): Promise<Review> => {
   const result = await prisma.review.create({
     data: payload,
   });

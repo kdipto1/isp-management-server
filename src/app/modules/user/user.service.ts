@@ -99,6 +99,29 @@ const getById = async (id: string) => {
   return result;
 };
 
+const getUserProfile = async (userId: string) => {
+  const result = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      id: true,
+      email: true,
+      firstName: true,
+      middleName: true,
+      lastName: true,
+      contactNo: true,
+      profileImage: true,
+      address: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+      password: false,
+    },
+  });
+  return result;
+};
+
 const updateById = async (id: string, payload: Partial<User>) => {
   const result = await prisma.user.update({
     where: {
@@ -125,4 +148,5 @@ export const UserService = {
   getById,
   updateById,
   deleteById,
+  getUserProfile,
 };
