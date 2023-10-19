@@ -1,15 +1,27 @@
 import { Prisma, Review } from '@prisma/client';
 import prisma from '../../../shared/prisma';
+import { JwtPayload } from 'jsonwebtoken';
 
-const create = async (payload: Prisma.ReviewCreateInput): Promise<Review> => {
+const create = async (
+  customer: JwtPayload,
+  payload: Prisma.ReviewCreateInput,
+): Promise<Review> => {
   const result = await prisma.review.create({
-    data: payload,
+    data: {
+      message: payload.message,
+      customerId: customer.userId,
+      ratting: payload.ratting,
+    },
   });
   return result;
 };
 
 const getAllOrFilter = async () => {
-  const result = await prisma.review.findMany({});
+  const result = await prisma.review.findMany({
+    include: {
+      customer: true,
+    },
+  });
 
   return result;
 };

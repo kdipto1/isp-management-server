@@ -1,2 +1,2 @@
-'use strict';
-// Define your interfaces here
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

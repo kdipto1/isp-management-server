@@ -45,17 +45,20 @@ model Package {
   updatedAt                DateTime                   @updatedAt
   payments                 Payment[]
   customerConnectionStatus CustomerConnectionStatus[]
+  newConnectionReq         NewConnectionReq[]
 
   @@map("packages")
 }
 
 model NewConnectionReq {
-  id                String                 @id @default(uuid())
-  customerId        String
-  customer          User                   @relation(fields: [customerId], references: [id])
-  connectionDate    DateTime
-  connectionAddress String
-  status            NewConnectionReqStatus @default(pending)
+  id                 String                 @id @default(uuid())
+  customerId         String
+  customer           User                   @relation(fields: [customerId], references: [id])
+  connectionDate     DateTime
+  connectionAddress  String
+  status             NewConnectionReqStatus @default(pending)
+  broadbandPackageId String
+  broadbandPackage   Package                @relation(fields: [broadbandPackageId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -5,7 +5,9 @@ import sendResponse from '../../../shared/sendResponse';
 import httpStatus from 'http-status';
 
 const create = catchAsync(async (req: Request, res: Response) => {
-  const result = await ReviewService.create(req.body);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const customer = req.user as any;
+  const result = await ReviewService.create(customer, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
