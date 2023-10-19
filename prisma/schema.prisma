@@ -38,8 +38,8 @@ model Package {
   name      String
   price     Int
   bandwidth Int
-  iptv      Boolean
-  bdix      Boolean
+  iptv      Boolean @default(false)
+  bdix      Boolean @default(false)
 
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @updatedAt
